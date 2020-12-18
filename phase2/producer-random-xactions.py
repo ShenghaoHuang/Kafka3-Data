@@ -29,3 +29,9 @@ class Producer:
 if __name__ == "__main__":
     p = Producer()
     p.generateRandomXactions(n=20)
+
+
+#3 producers, one to create customers
+#2 for transactions
+# change the payload of the message
+# bank branch id as part of the message

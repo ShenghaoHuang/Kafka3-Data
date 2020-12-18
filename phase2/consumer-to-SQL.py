@@ -1,3 +1,4 @@
+import statistics
 from kafka import KafkaConsumer, TopicPartition
 from json import loads
 
@@ -22,6 +23,7 @@ class XactionConsumer:
     def handleMessages(self):
         deposit = []
         withdrawl = []
+        limit = 0
         for message in self.consumer:
             message = message.value
             print('{} received'.format(message))
@@ -38,11 +40,18 @@ class XactionConsumer:
             print(self.custBalances)
             if len(deposit) >= 1:
                 average = sum(deposit)/len(deposit)
-                print(f'Deposit amount {len(deposit)}, average deposit = {round(average, 2)}')
+                print(f'Total Deposit amount: {len(deposit)}, average deposit = {round(average, 2)}')
 
             if len(withdrawl) >= 1:
                 average_w = sum(withdrawl)/len(withdrawl)
-                print(f'Depost amount {len(withdrawl)}, average deposit = {round(average_w, 2)}')
+                print(f'Total Withdrawal amount: {len(withdrawl)}, average withdraw = {round(average_w, 2)}')
+            for x in self.custBalances:
+                if self.custBalances[x] < -5000:
+                    limit = self.custBalances[x]
+                    for key, value in self.custBalances.items():
+                        if limit == value:
+                            print(f'{key} HAS EXCEEDED THE LIMIT OF -5000 BEWARE')
+
 
 if __name__ == "__main__":
     c = XactionConsumer()
